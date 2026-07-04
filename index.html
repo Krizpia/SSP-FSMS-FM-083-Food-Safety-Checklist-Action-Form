@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Food Safety Checklist & Action Form</title>
 
 <style>
@@ -23,9 +23,13 @@ body {
 }
 
 .buttons {
+  position: sticky;
+  top: 0;
+  z-index: 999;
   text-align: center;
-  padding: 12px;
+  padding: 10px;
   background: #eef3f7;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 button {
@@ -35,13 +39,24 @@ button {
   border: none;
   border-radius: 6px;
   font-weight: bold;
-  margin: 5px;
+  margin: 4px;
   cursor: pointer;
+}
+
+button.secondary {
+  background: #444;
+}
+
+.mobile-note {
+  display: none;
+  font-size: 12px;
+  margin-top: 5px;
+  color: #333;
 }
 
 .page {
   width: 285mm;
-  height: 190mm;
+  min-height: 190mm;
   margin: 10px auto;
   background: #fff;
   padding: 5mm;
@@ -51,69 +66,66 @@ button {
 
 .logo {
   text-align: center;
-  height: 30px;
+  height: 34px;
 }
 
 .logo img {
-  width: 95px;
-  max-height: 30px;
+  width: 105px;
+  max-height: 34px;
   object-fit: contain;
 }
 
 h1 {
   text-align: center;
-  font-size: 20px;
-  margin: 4px 0 8px;
+  font-size: 22px;
+  margin: 5px 0 9px;
   font-weight: 800;
 }
 
 .top-row {
   display: flex;
   border: 1px solid #333;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .top-row div {
   flex: 1;
-  padding: 5px;
-}
-
-input, select, textarea {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
+  padding: 6px 8px;
 }
 
 .top-row input {
   border: none;
   outline: none;
   width: 70%;
+  font-size: 14px;
 }
 
 .info {
   background: #0078bd;
   color: white;
   font-weight: bold;
-  padding: 5px;
+  padding: 6px 8px;
   border-left: 1px solid #333;
   border-right: 1px solid #333;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.25;
 }
 
 .checklist {
   display: grid;
-  grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr 36px;
+  grid-template-columns: 1fr 46px 1fr 46px 1fr 46px 1fr 46px;
   border-left: 1px solid #333;
   border-top: 1px solid #333;
 }
 
-.item, .mark {
+.item,
+.mark {
   border-right: 1px solid #333;
   border-bottom: 1px solid #333;
-  padding: 4px;
-  min-height: 27px;
-  font-size: 10.5px;
-  line-height: 1.15;
+  padding: 5px;
+  min-height: 38px;
+  font-size: 14px;
+  line-height: 1.18;
 }
 
 .item {
@@ -123,26 +135,27 @@ input, select, textarea {
 .mark {
   background: #fff;
   text-align: center;
-  padding: 3px;
+  padding: 4px;
 }
 
 .mark select {
   width: 100%;
-  height: 20px;
-  font-size: 10px;
+  height: 28px;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .score-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 7px;
-  font-size: 11px;
+  margin-top: 8px;
+  font-size: 14px;
 }
 
 .doc-footer {
   text-align: center;
-  margin-top: 7px;
-  font-size: 10px;
+  margin-top: 8px;
+  font-size: 12px;
 }
 
 .action-table {
@@ -155,15 +168,15 @@ input, select, textarea {
   background: #0078bd;
   color: white;
   border: 1px solid #333;
-  padding: 5px;
-  font-size: 12px;
+  padding: 6px;
+  font-size: 14px;
 }
 
 .action-table td {
   border: 1px solid #333;
-  height: 32px;
+  height: 45px;
   padding: 3px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .action-table input,
@@ -173,6 +186,8 @@ input, select, textarea {
   border: none;
   outline: none;
   resize: none;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
 }
 
 .no-col {
@@ -184,8 +199,8 @@ input, select, textarea {
 .footer-line {
   border: 1px solid #333;
   border-top: none;
-  padding: 9px;
-  font-size: 12px;
+  padding: 10px;
+  font-size: 14px;
 }
 
 .signatures {
@@ -193,9 +208,42 @@ input, select, textarea {
   justify-content: space-around;
   margin-top: 42px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
 }
 
+/* MOBILE FRIENDLY */
+@media screen and (max-width: 900px) {
+  body {
+    background: #eef3f7;
+  }
+
+  .mobile-note {
+    display: block;
+  }
+
+  .page {
+    width: 100%;
+    min-height: auto;
+    margin: 0;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .page-inner {
+    min-width: 1050px;
+  }
+
+  .buttons button {
+    width: 46%;
+    max-width: 180px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+}
+
+/* PRINT SAME FORM */
 @media print {
   body {
     background: white;
@@ -211,8 +259,20 @@ input, select, textarea {
     height: 190mm;
     margin: 0;
     padding: 5mm;
+    overflow: hidden;
     page-break-after: always;
     break-after: page;
+  }
+
+  .page-inner {
+    min-width: auto;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    text-align: center;
   }
 }
 </style>
@@ -223,10 +283,13 @@ input, select, textarea {
 <div class="buttons">
   <button onclick="calculateScore()">Calculate Score</button>
   <button onclick="window.print()">Print / Save PDF</button>
+  <button class="secondary" onclick="resetForm()">Reset</button>
+  <div class="mobile-note">On mobile, scroll left/right to fill the full form.</div>
 </div>
 
 <!-- PAGE 1 -->
 <div class="page">
+<div class="page-inner">
 
   <div class="logo">
     <img src="ssp-logo.png" alt="SSP Bahrain Logo">
@@ -249,7 +312,7 @@ input, select, textarea {
 
   <div class="score-row">
     <div>Completed by: Mohammed Eassa Haneefa</div>
-    <div>Score: <span id="score">0%</span></div>
+    <div>Score: <strong><span id="score">0%</span></strong></div>
   </div>
 
   <div class="doc-footer">
@@ -257,9 +320,11 @@ input, select, textarea {
   </div>
 
 </div>
+</div>
 
 <!-- PAGE 2 -->
 <div class="page">
+<div class="page-inner">
 
   <div class="logo">
     <img src="ssp-logo.png" alt="SSP Bahrain Logo">
@@ -268,9 +333,9 @@ input, select, textarea {
   <h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
 
   <div class="top-row">
-    <div>Unit/Location: <input id="unit2" type="text"></div>
-    <div>Date: <input id="date2" type="date"></div>
-    <div>Score: <span id="score2">0%</span></div>
+    <div>Unit/Location: <input id="unit2" type="text" readonly></div>
+    <div>Date: <input id="date2" type="date" readonly></div>
+    <div>Score: <strong><span id="score2">0%</span></strong></div>
   </div>
 
   <table class="action-table">
@@ -301,6 +366,7 @@ input, select, textarea {
     Doc ID: SSP-FSMS-FM-083; Vs. 0.0; Issue Date: 10.08.2024; Page 2 of 2
   </div>
 
+</div>
 </div>
 
 <script>
@@ -375,10 +441,7 @@ function calculateScore() {
   let failedNumbers = [];
 
   document.querySelectorAll(".mark select").forEach(select => {
-    if (select.value === "yes") {
-      yes++;
-    }
-
+    if (select.value === "yes") yes++;
     if (select.value === "no") {
       no++;
       failedNumbers.push(select.dataset.no);
@@ -393,6 +456,11 @@ function calculateScore() {
   document.getElementById("unit2").value = document.getElementById("unit").value;
   document.getElementById("date2").value = document.getElementById("date").value;
 
+  createActionRows(failedNumbers);
+  saveData();
+}
+
+function createActionRows(failedNumbers) {
   const actionBody = document.getElementById("actionBody");
   actionBody.innerHTML = "";
 
@@ -400,11 +468,11 @@ function calculateScore() {
     actionBody.innerHTML += `
       <tr>
         <td class="no-col">${no}</td>
-        <td><textarea></textarea></td>
-        <td><textarea></textarea></td>
-        <td><input type="text"></td>
+        <td><textarea placeholder="Comment"></textarea></td>
+        <td><textarea placeholder="Action"></textarea></td>
+        <td><input type="text" placeholder="Name"></td>
         <td><input type="date"></td>
-        <td><input type="text"></td>
+        <td><input type="text" placeholder="Verification"></td>
       </tr>
     `;
   });
@@ -425,9 +493,54 @@ function calculateScore() {
   }
 }
 
+function saveData() {
+  const data = {
+    unit: document.getElementById("unit").value,
+    date: document.getElementById("date").value,
+    marks: []
+  };
+
+  document.querySelectorAll(".mark select").forEach(select => {
+    data.marks.push(select.value);
+  });
+
+  localStorage.setItem("foodSafetyChecklist", JSON.stringify(data));
+}
+
+function loadData() {
+  const saved = localStorage.getItem("foodSafetyChecklist");
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+
+  document.getElementById("unit").value = data.unit || "";
+  document.getElementById("date").value = data.date || "";
+
+  document.querySelectorAll(".mark select").forEach((select, index) => {
+    select.value = data.marks[index] || "";
+  });
+
+  calculateScore();
+}
+
+function resetForm() {
+  if (!confirm("Are you sure you want to reset the form?")) return;
+
+  localStorage.removeItem("foodSafetyChecklist");
+  document.getElementById("unit").value = "";
+  document.getElementById("date").value = "";
+
+  document.querySelectorAll(".mark select").forEach(select => {
+    select.value = "";
+  });
+
+  calculateScore();
+}
+
 document.getElementById("unit").addEventListener("input", calculateScore);
 document.getElementById("date").addEventListener("input", calculateScore);
 
+loadData();
 calculateScore();
 </script>
 
