@@ -3,130 +3,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Safety Checklist & Action Form</title>
+<title>Food Safety Checklist</title>
+
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f4f7fa;color:#111}
-.container{max-width:1200px;margin:auto;background:white;padding:20px}
-.logo{text-align:center;font-weight:bold;color:#0077b6;font-size:24px}
-h1{text-align:center;font-size:28px;margin:10px 0 20px}
-.top-row{display:flex;border:1px solid #333}
-.top-row div{flex:1;padding:10px}
-.info{background:#0078bd;color:white;font-weight:bold;padding:10px;border:1px solid #333}
-.checklist{display:grid;grid-template-columns:1fr 55px 1fr 55px 1fr 55px 1fr 55px;border-left:1px solid #333;border-top:1px solid #333}
-.item,.mark{border-right:1px solid #333;border-bottom:1px solid #333;padding:9px;background:#dff3f8}
-.mark{background:white;text-align:center}
-.mark select{width:100%;padding:6px}
-.action-title{text-align:center;font-size:26px;font-weight:bold;margin:30px 0 15px}
-.score-box{display:flex;justify-content:space-between;margin:15px 0;font-size:18px}
-.action-table{width:100%;border-collapse:collapse}
-.action-table th{background:#0078bd;color:white;padding:10px;border:1px solid #333}
-.action-table td{border:1px solid #333;padding:8px;height:45px}
-.action-table input,.action-table textarea{width:100%;border:none;outline:none;font-size:15px}
-.footer-line{border:1px solid #333;border-top:none;padding:15px}
-.signatures{display:flex;justify-content:space-around;margin-top:60px;text-align:center}
-button{margin:20px 5px;padding:12px 18px;background:#0078bd;color:white;border:none;border-radius:6px;font-weight:bold}
-@media print{button{display:none}.container{padding:0}}
+@page {
+  size: A4 landscape;
+  margin: 8mm;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #eef3f7;
+  color: #111;
+}
+
+.page {
+  width: 100%;
+  min-height: 190mm;
+  background: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+.logo {
+  text-align: center;
+}
+
+.logo img {
+  width: 120px;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin: 5px 0 12px;
+}
+
+.top-row {
+  display: flex;
+  border: 1px solid #333;
+  font-size: 16px;
+}
+
+.top-row div {
+  flex: 1;
+  padding: 7px;
+}
+
+input, select, textarea {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.info {
+  background: #0078bd;
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  border: 1px solid #333;
+  font-size: 15px;
+}
+
+.checklist {
+  display: grid;
+  grid-template-columns: 1fr 48px 1fr 48px 1fr 48px 1fr 48px;
+  border-left: 1px solid #333;
+  border-top: 1px solid #333;
+}
+
+.item, .mark {
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  padding: 6px;
+  min-height: 38px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.item {
+  background: #dff3f8;
+}
+
+.mark {
+  background: white;
+  text-align: center;
+}
+
+.mark select {
+  width: 100%;
+  height: 30px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.action-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.action-table th {
+  background: #0078bd;
+  color: white;
+  border: 1px solid #333;
+  padding: 8px;
+  font-size: 15px;
+}
+
+.action-table td {
+  border: 1px solid #333;
+  height: 40px;
+  padding: 4px;
+}
+
+.action-table input,
+.action-table textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.no-col {
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.footer-line {
+  border: 1px solid #333;
+  border-top: none;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.signatures {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 45px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.doc-footer {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.buttons {
+  text-align: center;
+  padding: 15px;
+}
+
+button {
+  padding: 12px 18px;
+  background: #0078bd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  .page {
+    page-break-after: always;
+  }
+}
 </style>
 </head>
+
 <body>
-<div class="container">
 
-<div class="logo">SSP Bahrain</div>
-<h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
-
-<div class="top-row">
-  <div>Unit/Location: <input id="unit"></div>
-  <div>Date: <input type="date" id="date"></div>
+<div class="buttons">
+  <button onclick="calculateScore()">Calculate Score</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="info">
-Mark with ‘✓’ whatever is correct and with ‘X’ whatever is not. For points not related write ‘N/A’. Score = ✓ / (✓ + X) × 100. Anything over 90% is success.
+<!-- PAGE 1 -->
+<div class="page">
+
+  <div class="logo">
+    <img src="ssp-logo.png" alt="SSP Bahrain Logo">
+  </div>
+
+  <h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
+
+  <div class="top-row">
+    <div>Unit/Location: <input id="unit" style="width:70%;border:none;outline:none;"></div>
+    <div>Date: <input type="date" id="date" style="border:none;outline:none;"></div>
+  </div>
+
+  <div class="info">
+    Mark with ‘✓’ whatever is correct and with ‘X’ whatever is not. For points not related to the unit/location write ‘N/A’.
+    Score = ✓ / (✓ + X) × 100. Anything over 90% is success.
+  </div>
+
+  <div class="checklist" id="checklist"></div>
+
+  <div class="score-row">
+    <div>Completed by: Mohammed Eassa Haneefa</div>
+    <div>Score: <span id="score">0%</span></div>
+  </div>
+
+  <div class="doc-footer">
+    Doc ID: SSP-FSMS-FM-083; Vs. 0.0; Issue Date: 10.08.2024; Page 1 of 2
+  </div>
+
 </div>
 
-<div class="checklist" id="checklist"></div>
+<!-- PAGE 2 -->
+<div class="page">
 
-<div class="score-box">
-  <div>Completed by: Mohammed Eassa Haneefa</div>
-  <div>Score: <span id="score">0%</span></div>
-</div>
+  <div class="logo">
+    <img src="ssp-logo.png" alt="SSP Bahrain Logo">
+  </div>
 
-<div class="action-title">FOOD SAFETY CHECKLIST & ACTION FORM</div>
+  <h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
 
-<div class="top-row">
-  <div>Unit/Location: <input></div>
-  <div>Date: <input type="date"></div>
-  <div>Score: <span id="score2">0%</span></div>
-</div>
+  <div class="top-row">
+    <div>Unit/Location: <input id="unit2" style="width:70%;border:none;outline:none;"></div>
+    <div>Date: <input type="date" id="date2" style="border:none;outline:none;"></div>
+    <div>Score: <span id="score2">0%</span></div>
+  </div>
 
-<table class="action-table">
-<thead>
-<tr>
-<th>No.</th><th>Comment</th><th>Action to be taken</th><th>Responsible</th><th>Deadline</th><th>Date & Verification</th>
-</tr>
-</thead>
-<tbody>
-<script>
-for(let i=1;i<=8;i++){
-document.write(`<tr>
-<td>${i}</td>
-<td><textarea></textarea></td>
-<td><textarea></textarea></td>
-<td><input></td>
-<td><input type="date"></td>
-<td><input></td>
-</tr>`);
-}
-</script>
-</tbody>
-</table>
+  <table class="action-table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Comment</th>
+        <th>Action to be taken</th>
+        <th>Responsible</th>
+        <th>Deadline</th>
+        <th>Date & Verification</th>
+      </tr>
+    </thead>
+    <tbody id="actionBody"></tbody>
+  </table>
 
-<div class="footer-line">
-Date of action plan completion ............................................................
-</div>
+  <div class="footer-line">
+    Date of action plan completion ....................................................................................
+  </div>
 
-<div class="signatures">
-<div>Acknowledged by<br><br>Unit / Location Manager</div>
-<div>Verified by<br><br>FSTL</div>
-<div>Verified by<br><br>Operations Manager</div>
-</div>
+  <div class="signatures">
+    <div>Acknowledged by<br><br>Unit / Location Manager</div>
+    <div>Verified by<br><br>FSTL</div>
+    <div>Verified by<br><br>Operations Manager</div>
+  </div>
 
-<button onclick="calculateScore()">Calculate Score</button>
-<button onclick="window.print()">Print / Save PDF</button>
+  <div class="doc-footer">
+    Doc ID: SSP-FSMS-FM-083; Vs. 0.0; Issue Date: 10.08.2024; Page 2 of 2
+  </div>
 
 </div>
 
 <script>
 const items = [
-"No evidence of PEST activity","PEST treatment done in the last month","Chiller/freezer temperatures are correct","Chiller/freezer temperatures are taken 3 times daily","Maintenance Issues are being recorded and communicated","Team knows how and where to dispose broken glass/crockery","No threat which could result to trip, slip or fall","Manual handling performed as per guidelines","Waste disposal performed as per procedures","Hands are being sanitized correctly","Hand washing sink is in good working order and equipped with soap/sanitizer and paper towel","Uniforms are clean and neatly worn",
-"Gloves or appropriate utensil is being used when handling food","The updated shelf-life guide is available","Areas are cleaned/sanitized","Equipment is clean/sanitized","Cleaning checklists are complete and correct","MSDS files for all chemicals are available","Chemicals are being correctly used","Ice Machine is clean inside out","Ice Machine cleaning record is complete","Food is stored in the correct temperature range","Fire Extinguishers are available and ready to use","Fire Extinguisher checklist is complete monthly",
-"First Aid Box is available and complete","The First aid inventory card is completed for the last month","Products are day dotted according to the shelf-life guide","FIFO is applicable","No expired products found","Correct color coding is applicable","Food in hot & cold holding is in the proper temperature range","Cold & Hot Holding temperature record is complete and correct","Thermometers are being calibrated weekly","Fruit & Veg Sanitation record is complete and correct","Food in chiller is stored as per the chiller guide","Foods are stored in the correct temperature",
-"Cooking/reheating records are complete and correct","Foods are stored in closed food grade containers","Cooling records are complete and correct","Cold water thawing records are complete and correct","Products thawed in the chiller are clearly marked and placed on the designated shelf","Grease traps were cleaned in the last month","Hoods/exhaust fans were cleaned in the last 3 months","Knives handover and inventory logs are complete and correct","Knives are safely used","Quality Check is complete"
+"No evidence of PEST activity",
+"PEST treatment done in the last month",
+"Chiller/freezer temperatures are correct",
+"Chiller/freezer temperatures are taken 3 times daily",
+"Maintenance Issues are being recorded and communicated",
+"Team knows how and where to dispose broken glass/crockery",
+"No threat which could result to trip, slip or fall",
+"Manual handling performed as per guidelines",
+"Waste disposal performed as per procedures",
+"Hands are being sanitized correctly",
+"Hand washing sink is in good working order and equipped with soap/sanitizer and paper towel",
+"Uniforms are clean and neatly worn",
+"Gloves or appropriate utensil is being used when handling food",
+"The updated shelf-life guide is available",
+"Areas are cleaned/sanitized",
+"Equipment is clean/sanitized",
+"Cleaning checklists are complete and correct",
+"MSDS files for all chemicals are available",
+"Chemicals are being correctly used",
+"Ice Machine is clean inside out",
+"Ice Machine cleaning record is complete",
+"Food is stored in the correct temperature range",
+"Fire Extinguishers are available and ready to use",
+"Fire Extinguisher checklist is complete monthly",
+"First Aid Box is available and complete",
+"The First aid inventory card is completed for the last month",
+"Products are day dotted according to the shelf-life guide",
+"FIFO is applicable",
+"No expired products found",
+"Correct color coding is applicable",
+"Food in hot & cold holding is in the proper temperature range",
+"Cold & Hot Holding temperature record is complete and correct",
+"Thermometers are being calibrated weekly",
+"Fruit & Veg Sanitation record is complete and correct",
+"Food in chiller is stored as per the chiller guide",
+"Foods are stored in the correct temperature",
+"Cooking/reheating records are complete and correct",
+"Foods are stored in closed food grade containers",
+"Cooling records are complete and correct",
+"Cold water thawing records are complete and correct",
+"Products thawed in the chiller are clearly marked and placed on the designated shelf",
+"Grease traps were cleaned in the last month",
+"Hoods/exhaust fans were cleaned in the last 3 months",
+"Knives handover and inventory logs are complete and correct",
+"Knives are safely used",
+"Quality Check is complete"
 ];
 
 const checklist = document.getElementById("checklist");
-items.forEach((text,i)=>{
- checklist.innerHTML += `
- <div class="item">${i+1}. ${text}</div>
- <div class="mark">
- <select onchange="calculateScore()">
- <option value="">-</option>
- <option value="yes">✓</option>
- <option value="no">X</option>
- <option value="na">N/A</option>
- </select>
- </div>`;
+
+items.forEach((text, index) => {
+  checklist.innerHTML += `
+    <div class="item">${index + 1}. ${text}</div>
+    <div class="mark">
+      <select data-no="${index + 1}" onchange="calculateScore()">
+        <option value="">-</option>
+        <option value="yes">✓</option>
+        <option value="no">X</option>
+        <option value="na">N/A</option>
+      </select>
+    </div>
+  `;
 });
 
-function calculateScore(){
- let yes=0,no=0;
- document.querySelectorAll(".mark select").forEach(s=>{
-   if(s.value==="yes") yes++;
-   if(s.value==="no") no++;
- });
- let score = yes + no > 0 ? Math.round((yes/(yes+no))*100) : 0;
- document.getElementById("score").innerText = score + "%";
- document.getElementById("score2").innerText = score + "%";
+function calculateScore() {
+  let yes = 0;
+  let no = 0;
+  let failedNumbers = [];
+
+  document.querySelectorAll(".mark select").forEach(select => {
+    if (select.value === "yes") yes++;
+    if (select.value === "no") {
+      no++;
+      failedNumbers.push(select.dataset.no);
+    }
+  });
+
+  let score = yes + no > 0 ? Math.round((yes / (yes + no)) * 100) : 0;
+
+  document.getElementById("score").innerText = score + "%";
+  document.getElementById("score2").innerText = score + "%";
+
+  document.getElementById("unit2").value = document.getElementById("unit").value;
+  document.getElementById("date2").value = document.getElementById("date").value;
+
+  const actionBody = document.getElementById("actionBody");
+  actionBody.innerHTML = "";
+
+  failedNumbers.forEach(no => {
+    actionBody.innerHTML += `
+      <tr>
+        <td class="no-col">${no}</td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><input></td>
+        <td><input type="date"></td>
+        <td><input></td>
+      </tr>
+    `;
+  });
+
+  let emptyRows = Math.max(8 - failedNumbers.length, 0);
+
+  for (let i = 0; i < emptyRows; i++) {
+    actionBody.innerHTML += `
+      <tr>
+        <td class="no-col"></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><input></td>
+        <td><input type="date"></td>
+        <td><input></td>
+      </tr>
+    `;
+  }
 }
+
+calculateScore();
 </script>
 
 </body>
