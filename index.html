@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Food Safety Audit Pro</title>
+
+<meta name="theme-color" content="#0F4C81">
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="apple-touch-icon" href="icon-192.png">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<h1>🍽 Food Safety Audit Pro</h1>
+
+<p>SSP Bahrain Food Safety Checklist</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Auditor Information</h2>
+
+<div class="form-group">
+<label>Auditor Name</label>
+<input type="text" id="auditor" placeholder="Enter Auditor Name">
+</div>
+
+<div class="form-group">
+<label>Outlet / Unit</label>
+<input type="text" id="outlet" placeholder="Enter Outlet Name">
+</div>
+
+<div class="form-group">
+<label>Audit Date</label>
+<input type="date" id="auditDate">
+</div>
+
+<div class="form-group">
+<label>Audit Time</label>
+<input type="time" id="auditTime">
+</div>
+
+<button id="startAudit">
+Start Audit
+</button>
+
+</div>
+
+<div id="auditSection" style="display:none;">
+
+<div class="card">
+
+<h2>Food Safety Checklist</h2>
+
+<div id="checklist"></div>
+
+</div>
+
+<div class="card score">
+
+<h2>Audit Result</h2>
+
+<p>Total ✓ : <span id="yesCount">0</span></p>
+
+<p>Total ✗ : <span id="noCount">0</span></p>
+
+<p>Total N/A : <span id="naCount">0</span></p>
+
+<h3>Score</h3>
+
+<div id="score">0%</div>
+
+<button id="calculateScore">
+Calculate Score
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
