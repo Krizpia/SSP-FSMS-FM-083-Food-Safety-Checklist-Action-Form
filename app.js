@@ -48,6 +48,7 @@ const checklistItems = [
 ];
 
 const answers = {};
+const actionOnlyMode = new URLSearchParams(window.location.search).get("mode") === "action";
 
 const auditDateInput = document.getElementById("auditDate");
 const auditTimeInput = document.getElementById("auditTime");
@@ -61,13 +62,14 @@ document.getElementById("startAudit").addEventListener("click", () => {
   const auditor = document.getElementById("auditor").value.trim();
   const outlet = document.getElementById("outlet").value.trim();
 
-  if (!auditor || !outlet) {
+  if (!actionOnlyMode && (!auditor || !outlet)) {
     alert("Please enter Auditor Name and Outlet / Unit.");
     return;
   }
 
   document.getElementById("auditSection").style.display = "block";
   renderChecklist();
+  applyActionOnlyMode();
   window.scrollTo({ top: document.getElementById("auditSection").offsetTop, behavior: "smooth" });
 });
 
@@ -85,9 +87,9 @@ function renderChecklist() {
       <div class="check-title">${number}. ${item}</div>
 
       <div class="options">
-        <button type="button" class="yes" onclick="selectAnswer(${number}, 'yes', this)">✓ Yes</button>
-        <button type="button" class="no" onclick="selectAnswer(${number}, 'no', this)">✗ No</button>
-        <button type="button" class="na" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
+        <button type="button" class="yes answer-button" onclick="selectAnswer(${number}, 'yes', this)">✓ Yes</button>
+        <button type="button" class="no answer-button" onclick="selectAnswer(${number}, 'no', this)">✗ No</button>
+        <button type="button" class="na answer-button" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
       </div>
 
       <div class="action-box" id="action-${number}" aria-live="polite">
@@ -121,7 +123,29 @@ function renderChecklist() {
   });
 }
 
+function applyActionOnlyMode() {
+  if (!actionOnlyMode) return;
+
+  document.body.classList.add("action-only");
+  const notice = document.getElementById("actionModeNotice");
+  if (notice) notice.style.display = "block";
+
+  document.querySelectorAll(".action-box").forEach(actionBox => {
+    actionBox.style.display = "block";
+  });
+
+  document.querySelectorAll(".answer-button").forEach(button => {
+    button.disabled = true;
+    button.setAttribute("aria-disabled", "true");
+  });
+
+  document.querySelectorAll("#auditor, #outlet, #auditDate, #auditTime").forEach(input => {
+    input.readOnly = true;
+  });
+}
+
 function selectAnswer(number, value, button) {
+  if (actionOnlyMode) return;
   answers[number] = value;
 
   const parent = button.parentElement;
@@ -149,6 +173,9 @@ function selectAnswer(number, value, button) {
 document.getElementById("calculateScore").addEventListener("click", () => {
   calculateScore({ validatePhotos: true });
 });
+
+document.getElementById("generatePdf").addEventListener("click", generatePdf);
+document.getElementById("emailReport").addEventListener("click", emailReport);
 
 function getMissingNoPhotoItems() {
   return Object.entries(answers)
@@ -224,6 +251,46 @@ function previewPhoto(number, input) {
   };
 
   reader.readAsDataURL(file);
+}
+
+function getReportSummary() {
+  const auditor = document.getElementById("auditor").value.trim() || "Not provided";
+  const outlet = document.getElementById("outlet").value.trim() || "Not provided";
+  const auditDate = document.getElementById("auditDate").value || "Not provided";
+  const auditTime = document.getElementById("auditTime").value || "Not provided";
+  const score = document.getElementById("score").textContent;
+
+  const actionItems = Object.entries(answers)
+    .filter(([, answer]) => answer === "no")
+    .map(([number]) => {
+      const itemNumber = Number(number);
+      const comment = document.getElementById(`comment-${itemNumber}`).value.trim() || "No finding/comment entered";
+      const actionText = document.getElementById(`actionText-${itemNumber}`).value.trim() || "No corrective action entered";
+      const responsible = document.getElementById(`responsible-${itemNumber}`).value.trim() || "Unassigned";
+      const deadline = document.getElementById(`deadline-${itemNumber}`).value || "No deadline";
+      const verification = document.getElementById(`verification-${itemNumber}`).value.trim() || "No verification entered";
+
+      return `${itemNumber}. ${checklistItems[itemNumber - 1]}\nFinding: ${comment}\nCorrective Action: ${actionText}\nResponsible: ${responsible}\nDeadline: ${deadline}\nVerification: ${verification}`;
+    });
+
+  return `Food Safety Checklist & Action Form\nAuditor: ${auditor}\nOutlet / Unit: ${outlet}\nAudit Date: ${auditDate}\nAudit Time: ${auditTime}\nScore: ${score}\n\nCorrective Actions\n${actionItems.length ? actionItems.join("\n\n") : "No corrective actions recorded."}\n\nDoc ID: SSP-FSMS-FM-083; Vs 0.0; Issue Date : 10.08.2024`;
+}
+
+function generatePdf() {
+  if (!calculateScore({ validatePhotos: true })) return;
+  window.print();
+}
+
+function emailReport() {
+  if (!calculateScore({ validatePhotos: true })) return;
+
+  const subject = encodeURIComponent("Food Safety Checklist & Action Form");
+  const body = encodeURIComponent(`${getReportSummary()}\n\nAction-only link: ${window.location.origin}${window.location.pathname}?mode=action`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+if (actionOnlyMode) {
+  document.getElementById("startAudit").textContent = "Open Action Form";
 }
 
 if ("serviceWorker" in navigator) {

@@ -1,7 +1,7 @@
 {
-  "name": "Food Safety Audit Pro",
-  "short_name": "Audit Pro",
-  "description": "Personal Food Safety Audit PWA for ISO 22000 & HACCP inspections.",
+  "name": "Food Safety Checklist & Action Form",
+  "short_name": "FS Checklist",
+  "description": "SSP Bahrain Food Safety Checklist and corrective action form with PDF and email reporting.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
