@@ -1,1 +1,157 @@
+const checklistItems = [
+  "No evidence of PEST activity",
+  "PEST treatment done in the last month",
+  "Chiller/freezer temperatures are correct",
+  "Chiller/freezer temperatures are taken 3 times daily",
+  "Maintenance Issues are being recorded and communicated",
+  "Team knows how and where to dispose broken glass/crockery",
+  "No threat which could result to trip, slip or fall",
+  "Manual handling performed as per guidelines",
+  "Waste disposal performed as per procedures",
+  "Hands are being sanitized correctly",
+  "Hand washing sink is in good working order and equipped with soap/sanitizer and paper towel",
+  "Uniforms are clean and neatly worn",
+  "Gloves or appropriate utensil is being used when handling food",
+  "The updated shelf-life guide is available",
+  "Areas are cleaned/sanitized",
+  "Equipment is clean/sanitized",
+  "Cleaning checklists are complete and correct",
+  "MSDS files for all chemicals are available",
+  "Chemicals are being correctly used",
+  "Ice Machine is clean inside out",
+  "Ice Machine cleaning record is complete",
+  "Food is stored in the correct temperature range",
+  "Fire Extinguishers are available and ready to use",
+  "Fire Extinguisher checklist is complete monthly",
+  "First Aid Box is available and complete",
+  "The First aid inventory card is completed for the last month",
+  "Products are day dotted according to the shelf-life guide",
+  "FIFO is applicable",
+  "No expired products found",
+  "Correct color coding is applicable",
+  "Food in hot & cold holding is in the proper temperature range",
+  "Cold & Hot Holding temperature record is complete and correct",
+  "Thermometers are being calibrated weekly",
+  "Fruit & Veg Sanitation record is complete and correct",
+  "Food in chiller is stored as per the chiller guide",
+  "Foods are stored in the correct temperature",
+  "Cooking/reheating records are complete and correct",
+  "Foods are stored in closed food grade containers",
+  "Cooling records are complete and correct",
+  "Cold water thawing records are complete and correct",
+  "Products thawed in the chiller are clearly marked and placed on the designated shelf",
+  "Grease traps were cleaned in the last month",
+  "Hoods/exhaust fans were cleaned in the last 3 months",
+  "Knives handover and inventory logs are complete and correct",
+  "Knives are safely used",
+  "Quality Check is complete"
+];
 
+const answers = {};
+
+document.getElementById("auditDate").valueAsDate = new Date();
+
+const now = new Date();
+document.getElementById("auditTime").value =
+  now.toTimeString().slice(0, 5);
+
+document.getElementById("startAudit").addEventListener("click", () => {
+  const auditor = document.getElementById("auditor").value.trim();
+  const outlet = document.getElementById("outlet").value.trim();
+
+  if (!auditor || !outlet) {
+    alert("Please enter Auditor Name and Outlet / Unit.");
+    return;
+  }
+
+  document.getElementById("auditSection").style.display = "block";
+  renderChecklist();
+  window.scrollTo({ top: document.getElementById("auditSection").offsetTop, behavior: "smooth" });
+});
+
+function renderChecklist() {
+  const checklist = document.getElementById("checklist");
+  checklist.innerHTML = "";
+
+  checklistItems.forEach((item, index) => {
+    const number = index + 1;
+
+    const div = document.createElement("div");
+    div.className = "check-item";
+
+    div.innerHTML = `
+      <div class="check-title">${number}. ${item}</div>
+
+      <div class="options">
+        <button type="button" class="yes" onclick="selectAnswer(${number}, 'yes', this)">✓ Yes</button>
+        <button type="button" class="no" onclick="selectAnswer(${number}, 'no', this)">✗ No</button>
+        <button type="button" class="na" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
+      </div>
+
+      <div class="action-box" id="action-${number}">
+        <textarea id="comment-${number}" placeholder="Comment / Finding"></textarea>
+        <textarea id="actionText-${number}" placeholder="Action to be taken"></textarea>
+        <input type="text" id="responsible-${number}" placeholder="Responsible person">
+        <input type="date" id="deadline-${number}">
+        <input type="text" id="verification-${number}" placeholder="Verification / Date of completion">
+      </div>
+    `;
+
+    checklist.appendChild(div);
+  });
+}
+
+function selectAnswer(number, value, button) {
+  answers[number] = value;
+
+  const parent = button.parentElement;
+  const buttons = parent.querySelectorAll("button");
+
+  buttons.forEach(btn => btn.classList.remove("selected"));
+
+  button.classList.add("selected");
+
+  const actionBox = document.getElementById(`action-${number}`);
+
+  if (value === "no") {
+    actionBox.style.display = "block";
+  } else {
+    actionBox.style.display = "none";
+  }
+
+  calculateScore();
+}
+
+document.getElementById("calculateScore").addEventListener("click", calculateScore);
+
+function calculateScore() {
+  let yes = 0;
+  let no = 0;
+  let na = 0;
+
+  Object.values(answers).forEach(answer => {
+    if (answer === "yes") yes++;
+    if (answer === "no") no++;
+    if (answer === "na") na++;
+  });
+
+  const totalApplicable = yes + no;
+  const score = totalApplicable > 0 ? ((yes / totalApplicable) * 100).toFixed(2) : 0;
+
+  document.getElementById("yesCount").textContent = yes;
+  document.getElementById("noCount").textContent = no;
+  document.getElementById("naCount").textContent = na;
+  document.getElementById("score").textContent = `${score}%`;
+
+  const scoreBox = document.getElementById("score");
+
+  if (score >= 90) {
+    scoreBox.style.color = "#16a34a";
+  } else {
+    scoreBox.style.color = "#dc2626";
+  }
+}
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
