@@ -68,6 +68,8 @@ document.getElementById("startAudit").addEventListener("click", () => {
   }
 
   document.getElementById("auditSection").style.display = "block";
+  document.querySelector(".page-two").style.display = "block";
+  document.querySelector(".screen-controls").style.display = "block";
   renderChecklist();
   applyActionOnlyMode();
   window.scrollTo({ top: document.getElementById("auditSection").offsetTop, behavior: "smooth" });
@@ -77,50 +79,99 @@ function renderChecklist() {
   const checklist = document.getElementById("checklist");
   checklist.innerHTML = "";
 
-  checklistItems.forEach((item, index) => {
-    const number = index + 1;
+  const table = document.createElement("table");
+  table.className = "checklist-table";
+  const tbody = document.createElement("tbody");
 
-    const div = document.createElement("div");
-    div.className = "check-item";
+  const rowsPerColumn = 12;
 
-    div.innerHTML = `
-      <div class="check-title">${number}. ${item}</div>
+  for (let row = 0; row < rowsPerColumn; row++) {
+    const tr = document.createElement("tr");
 
-      <div class="options">
-        <button type="button" class="yes answer-button" onclick="selectAnswer(${number}, 'yes', this)">✓ Yes</button>
-        <button type="button" class="no answer-button" onclick="selectAnswer(${number}, 'no', this)">✗ No</button>
-        <button type="button" class="na answer-button" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
-      </div>
+    for (let column = 0; column < 4; column++) {
+      const number = row + 1 + column * rowsPerColumn;
+      const item = checklistItems[number - 1] || "";
 
-      <div class="action-box" id="action-${number}" aria-live="polite">
-        <textarea id="comment-${number}" placeholder="Finding / Comment"></textarea>
+      const itemCell = document.createElement("td");
+      itemCell.className = "check-text";
+      itemCell.textContent = item ? `${number}. ${item}` : "";
 
-        <label class="photoLabel" for="photo-${number}">📷 Evidence Photo <span class="required">Required for No answers</span></label>
-        <input
-          type="file"
-          id="photo-${number}"
-          accept="image/*"
-          capture="environment"
-          onchange="previewPhoto(${number}, this)"
-        >
-        <p class="photo-help" id="photo-help-${number}">Please attach photo proof before calculating the score.</p>
+      const answerCell = document.createElement("td");
+      answerCell.className = "answer-cell";
 
-        <img
-          id="preview-${number}"
-          class="previewImage"
-          alt="Evidence preview for checklist item ${number}"
-          style="display:none;"
-        >
+      if (item) {
+        answerCell.innerHTML = `
+          <button type="button" class="yes answer-button" onclick="selectAnswer(${number}, 'yes', this)">√</button>
+          <button type="button" class="no answer-button" onclick="selectAnswer(${number}, 'no', this)">×</button>
+          <button type="button" class="na answer-button" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
+        `;
+      }
 
-        <textarea id="actionText-${number}" placeholder="Corrective Action"></textarea>
-        <input type="text" id="responsible-${number}" placeholder="Responsible Person">
-        <input type="date" id="deadline-${number}">
-        <input type="text" id="verification-${number}" placeholder="Verification">
-      </div>
-    `;
+      tr.appendChild(itemCell);
+      tr.appendChild(answerCell);
+    }
 
-    checklist.appendChild(div);
-  });
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  checklist.appendChild(table);
+  renderActionPlanTable();
+  syncReportFields();
+}
+
+function renderActionPlanTable() {
+  const actionPlanTable = document.getElementById("actionPlanTable");
+  if (!actionPlanTable) return;
+
+  actionPlanTable.innerHTML = `
+    <table class="action-plan-table">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Comment</th>
+          <th>Action to be taken</th>
+          <th>Responsible</th>
+          <th>Deadline</th>
+          <th>Date & Verification</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Array.from({ length: 9 }, (_, index) => {
+          const number = index + 1;
+          return `
+            <tr class="action-box" id="action-${number}">
+              <td>${number}</td>
+              <td><textarea id="comment-${number}" placeholder="Finding / Comment"></textarea></td>
+              <td>
+                <textarea id="actionText-${number}" placeholder="Corrective Action"></textarea>
+                <label class="photoLabel" for="photo-${number}">📷 Evidence Photo <span class="required">Required for No answers</span></label>
+                <input type="file" id="photo-${number}" accept="image/*" capture="environment" onchange="previewPhoto(${number}, this)">
+                <p class="photo-help" id="photo-help-${number}">Please attach photo proof before calculating the score.</p>
+                <img id="preview-${number}" class="previewImage" alt="Evidence preview for checklist item ${number}" style="display:none;">
+              </td>
+              <td><input type="text" id="responsible-${number}" placeholder="Responsible Person"></td>
+              <td><input type="date" id="deadline-${number}"></td>
+              <td><input type="text" id="verification-${number}" placeholder="Verification"></td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function syncReportFields() {
+  const auditor = document.getElementById("auditor").value.trim();
+  const outlet = document.getElementById("outlet").value.trim();
+  const date = document.getElementById("auditDate").value;
+  const score = document.getElementById("score").textContent;
+
+  document.getElementById("completedByName").textContent = auditor;
+  document.getElementById("pageScore").textContent = score;
+  document.getElementById("actionUnit").textContent = outlet;
+  document.getElementById("actionDate").textContent = date;
+  document.getElementById("actionScore").textContent = score;
 }
 
 function applyActionOnlyMode() {
@@ -158,13 +209,13 @@ function selectAnswer(number, value, button) {
   const actionBox = document.getElementById(`action-${number}`);
   const photoInput = document.getElementById(`photo-${number}`);
 
-  if (value === "no") {
-    actionBox.style.display = "block";
-    photoInput.required = true;
-  } else {
-    actionBox.style.display = "none";
-    photoInput.required = false;
-    photoInput.classList.remove("missing-photo");
+  if (photoInput) {
+    photoInput.required = value === "no";
+    if (value !== "no") photoInput.classList.remove("missing-photo");
+  }
+
+  if (actionBox) {
+    actionBox.classList.toggle("needs-action", value === "no");
   }
 
   calculateScore({ validatePhotos: false });
@@ -183,7 +234,7 @@ function getMissingNoPhotoItems() {
     .map(([number]) => Number(number))
     .filter(number => {
       const photoInput = document.getElementById(`photo-${number}`);
-      return !photoInput || photoInput.files.length === 0;
+      return photoInput && photoInput.files.length === 0;
     });
 }
 
@@ -232,8 +283,13 @@ function calculateScore(options = {}) {
     scoreBox.style.color = "#dc2626";
   }
 
+  syncReportFields();
   return true;
 }
+
+["auditor", "outlet", "auditDate"].forEach(id => {
+  document.getElementById(id).addEventListener("input", syncReportFields);
+});
 
 function previewPhoto(number, input) {
   const file = input.files[0];
@@ -264,11 +320,11 @@ function getReportSummary() {
     .filter(([, answer]) => answer === "no")
     .map(([number]) => {
       const itemNumber = Number(number);
-      const comment = document.getElementById(`comment-${itemNumber}`).value.trim() || "No finding/comment entered";
-      const actionText = document.getElementById(`actionText-${itemNumber}`).value.trim() || "No corrective action entered";
-      const responsible = document.getElementById(`responsible-${itemNumber}`).value.trim() || "Unassigned";
-      const deadline = document.getElementById(`deadline-${itemNumber}`).value || "No deadline";
-      const verification = document.getElementById(`verification-${itemNumber}`).value.trim() || "No verification entered";
+      const comment = document.getElementById(`comment-${itemNumber}`)?.value.trim() || "No finding/comment entered";
+      const actionText = document.getElementById(`actionText-${itemNumber}`)?.value.trim() || "No corrective action entered";
+      const responsible = document.getElementById(`responsible-${itemNumber}`)?.value.trim() || "Unassigned";
+      const deadline = document.getElementById(`deadline-${itemNumber}`)?.value || "No deadline";
+      const verification = document.getElementById(`verification-${itemNumber}`)?.value.trim() || "No verification entered";
 
       return `${itemNumber}. ${checklistItems[itemNumber - 1]}\nFinding: ${comment}\nCorrective Action: ${actionText}\nResponsible: ${responsible}\nDeadline: ${deadline}\nVerification: ${verification}`;
     });

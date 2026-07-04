@@ -34,9 +34,13 @@
 
 <div class="container">
 
-<div class="card">
+<div class="document page page-one">
+  <div class="doc-logo"><img src="icon-192.png" alt="SSP Bahrain logo"></div>
+  <h1 class="doc-title">Food Safety Checklist &amp; Action Form</h1>
 
-<h2>Auditor Information</h2>
+<div class="card auditor-card">
+
+<h2 class="screen-only">Auditor Information</h2>
 
 <div class="form-group">
 <label>Auditor Name</label>
@@ -44,16 +48,16 @@
 </div>
 
 <div class="form-group">
-<label>Outlet / Unit</label>
+<label>Unit/Location:</label>
 <input type="text" id="outlet" placeholder="Enter Outlet Name">
 </div>
 
 <div class="form-group">
-<label>Audit Date</label>
+<label>Date:</label>
 <input type="date" id="auditDate">
 </div>
 
-<div class="form-group">
+<div class="form-group screen-only">
 <label>Audit Time</label>
 <input type="time" id="auditTime">
 </div>
@@ -64,19 +68,36 @@ Start Audit
 
 </div>
 
+
 <div id="auditSection" style="display:none;">
 
-<div class="card">
+<div class="card checklist-card">
 
-<h2>Food Safety Checklist</h2>
+<h2 class="screen-only">Food Safety Checklist</h2>
 
 <p id="actionModeNotice" class="notice" style="display:none;">Action-only mode: recipients can update corrective-action fields, but audit answers are locked.</p>
 
+<div class="checklist-instruction">Mark with <strong>√</strong> whatever is correct and with <strong>×</strong> whatever is not. For points not related to the unit/location write <strong>N/A</strong>. At the end of the audit divide the number of <strong>√</strong> by the sum of <strong>√ + ×</strong> to get the score. Scoring system: Anything over 90% is success. Action plan to be completed for points marked with <strong>×</strong>.</div>
 <div id="checklist"></div>
 
 </div>
 
-<div class="card score">
+<div class="completed-row">Completed by: <span id="completedByName"></span><span>Score: <span id="pageScore"></span></span><span class="tiny-box"></span></div>
+<footer class="page-footer">Doc ID: SSP-FSMS-FM-083; Vs. 0.0; Issue Date: 10.08.2024; <span>Page 1 of 2</span></footer>
+</div>
+</div>
+
+<div class="document page page-two">
+  <div class="doc-logo"><img src="icon-192.png" alt="SSP Bahrain logo"></div>
+  <h1 class="doc-title">Food Safety Checklist &amp; Action Form</h1>
+  <div class="action-plan-meta"><span>Unit/Location: <strong id="actionUnit"></strong></span><span>Date: <strong id="actionDate"></strong></span><span>Score: <strong id="actionScore"></strong></span></div>
+  <div id="actionPlanTable"></div>
+  <div class="completion-date">Date of action plan completion ....................................................</div>
+  <div class="signatures"><div><p>Verified by</p><p>Unit / Location Manager</p></div><div><p>Verified by</p><p>FSTL</p></div><div><p>Acknowledged by</p><p>Operations Manager</p></div></div>
+  <footer class="page-footer">Doc ID: SSP-FSMS-FM-083; Vs. 0.0; Issue Date: 10.08.2024; <span>Page 2 of 2</span></footer>
+</div>
+
+<div class="card score screen-controls">
 
 <h2>Audit Result</h2>
 
@@ -106,7 +127,7 @@ Send Email
 
 </div>
 
-<footer class="report-footer">Doc ID: SSP-FSMS-FM-083; Vs 0.0; Issue Date : 10.08.2024</footer>
+
 
 </div>
 
