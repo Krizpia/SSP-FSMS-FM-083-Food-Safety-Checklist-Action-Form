@@ -49,11 +49,13 @@ const checklistItems = [
 
 const answers = {};
 
-document.getElementById("auditDate").valueAsDate = new Date();
+const auditDateInput = document.getElementById("auditDate");
+const auditTimeInput = document.getElementById("auditTime");
+
+auditDateInput.valueAsDate = new Date();
 
 const now = new Date();
-document.getElementById("auditTime").value =
-  now.toTimeString().slice(0, 5);
+auditTimeInput.value = now.toTimeString().slice(0, 5);
 
 document.getElementById("startAudit").addEventListener("click", () => {
   const auditor = document.getElementById("auditor").value.trim();
@@ -88,54 +90,36 @@ function renderChecklist() {
         <button type="button" class="na" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
       </div>
 
+      <div class="action-box" id="action-${number}" aria-live="polite">
+        <textarea id="comment-${number}" placeholder="Finding / Comment"></textarea>
+
+        <label class="photoLabel" for="photo-${number}">📷 Evidence Photo <span class="required">Required for No answers</span></label>
+        <input
+          type="file"
+          id="photo-${number}"
+          accept="image/*"
+          capture="environment"
+          onchange="previewPhoto(${number}, this)"
+        >
+        <p class="photo-help" id="photo-help-${number}">Please attach photo proof before calculating the score.</p>
+
+        <img
+          id="preview-${number}"
+          class="previewImage"
+          alt="Evidence preview for checklist item ${number}"
+          style="display:none;"
+        >
+
+        <textarea id="actionText-${number}" placeholder="Corrective Action"></textarea>
+        <input type="text" id="responsible-${number}" placeholder="Responsible Person">
+        <input type="date" id="deadline-${number}">
+        <input type="text" id="verification-${number}" placeholder="Verification">
+      </div>
     `;
 
     checklist.appendChild(div);
   });
 }
-<div class="action-box" id="action-${number}">
-
-    <textarea id="comment-${number}" placeholder="Finding / Comment"></textarea>
-
-    <label class="photoLabel">📷 Evidence Photo</label>
-
-    <input
-        type="file"
-        id="photo-${number}"
-        accept="image/*"
-        capture="environment"
-        onchange="previewPhoto(${number}, this)"
-    >
-
-    <img
-        id="preview-${number}"
-        class="previewImage"
-        style="display:none;"
-    >
-
-    <textarea
-        id="actionText-${number}"
-        placeholder="Corrective Action"
-    ></textarea>
-
-    <input
-        type="text"
-        id="responsible-${number}"
-        placeholder="Responsible Person"
-    >
-
-    <input
-        type="date"
-        id="deadline-${number}"
-    >
-
-    <input
-        type="text"
-        id="verification-${number}"
-        placeholder="Verification"
-    >
-
-</div>
 
 function selectAnswer(number, value, button) {
   answers[number] = value;
@@ -148,19 +132,53 @@ function selectAnswer(number, value, button) {
   button.classList.add("selected");
 
   const actionBox = document.getElementById(`action-${number}`);
+  const photoInput = document.getElementById(`photo-${number}`);
 
   if (value === "no") {
     actionBox.style.display = "block";
+    photoInput.required = true;
   } else {
     actionBox.style.display = "none";
+    photoInput.required = false;
+    photoInput.classList.remove("missing-photo");
   }
 
-  calculateScore();
+  calculateScore({ validatePhotos: false });
 }
 
-document.getElementById("calculateScore").addEventListener("click", calculateScore);
+document.getElementById("calculateScore").addEventListener("click", () => {
+  calculateScore({ validatePhotos: true });
+});
 
-function calculateScore() {
+function getMissingNoPhotoItems() {
+  return Object.entries(answers)
+    .filter(([, answer]) => answer === "no")
+    .map(([number]) => Number(number))
+    .filter(number => {
+      const photoInput = document.getElementById(`photo-${number}`);
+      return !photoInput || photoInput.files.length === 0;
+    });
+}
+
+function calculateScore(options = {}) {
+  const { validatePhotos = false } = options;
+  const missingNoPhotoItems = getMissingNoPhotoItems();
+
+  document.querySelectorAll(".missing-photo").forEach(input => {
+    input.classList.remove("missing-photo");
+  });
+
+  if (validatePhotos && missingNoPhotoItems.length > 0) {
+    missingNoPhotoItems.forEach(number => {
+      const photoInput = document.getElementById(`photo-${number}`);
+      photoInput.classList.add("missing-photo");
+    });
+
+    alert(`Photo proof is required for every No answer. Please add evidence photo(s) for item(s): ${missingNoPhotoItems.join(", ")}.`);
+    document.getElementById(`photo-${missingNoPhotoItems[0]}`).focus();
+    return false;
+  }
+
   let yes = 0;
   let no = 0;
   let na = 0;
@@ -186,29 +204,28 @@ function calculateScore() {
   } else {
     scoreBox.style.color = "#dc2626";
   }
+
+  return true;
+}
+
+function previewPhoto(number, input) {
+  const file = input.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    const img = document.getElementById(`preview-${number}`);
+
+    img.src = e.target.result;
+    img.style.display = "block";
+    input.classList.remove("missing-photo");
+  };
+
+  reader.readAsDataURL(file);
 }
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
-}
-function previewPhoto(number, input){
-
-    const file = input.files[0];
-
-    if(!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-
-        const img = document.getElementById("preview-"+number);
-
-        img.src = e.target.result;
-
-        img.style.display="block";
-
-    }
-
-    reader.readAsDataURL(file);
-
 }

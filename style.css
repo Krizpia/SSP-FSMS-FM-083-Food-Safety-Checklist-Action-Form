@@ -133,6 +133,41 @@ button:active {
   margin-bottom: 8px;
 }
 
+.photoLabel {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.required {
+  color: #dc2626;
+  display: block;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.photo-help {
+  color: #6b7280;
+  font-size: 13px;
+  margin: -2px 0 8px;
+}
+
+.missing-photo {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+.previewImage {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+}
+
 .score {
   text-align: center;
 }
@@ -152,22 +187,6 @@ button:active {
   .container {
     padding: 12px;
   }
-  .photoLabel{
-    display:block;
-    margin-top:10px;
-    margin-bottom:8px;
-    font-weight:bold;
-}
-
-.previewImage{
-    width:100%;
-    max-height:220px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-top:10px;
-    border:1px solid #ddd;
-}
-
   .options {
     flex-direction: column;
   }
