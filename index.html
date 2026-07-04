@@ -1,117 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Food Safety Checklist & Action Form</title>
-
-<meta name="theme-color" content="#0F4C81">
-
-<link rel="manifest" href="manifest.json">
-
-<link rel="stylesheet" href="style.css">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f7fa;color:#111}
+.container{max-width:1200px;margin:auto;background:white;padding:20px}
+.logo{text-align:center;font-weight:bold;color:#0077b6;font-size:24px}
+h1{text-align:center;font-size:28px;margin:10px 0 20px}
+.top-row{display:flex;border:1px solid #333}
+.top-row div{flex:1;padding:10px}
+.info{background:#0078bd;color:white;font-weight:bold;padding:10px;border:1px solid #333}
+.checklist{display:grid;grid-template-columns:1fr 55px 1fr 55px 1fr 55px 1fr 55px;border-left:1px solid #333;border-top:1px solid #333}
+.item,.mark{border-right:1px solid #333;border-bottom:1px solid #333;padding:9px;background:#dff3f8}
+.mark{background:white;text-align:center}
+.mark select{width:100%;padding:6px}
+.action-title{text-align:center;font-size:26px;font-weight:bold;margin:30px 0 15px}
+.score-box{display:flex;justify-content:space-between;margin:15px 0;font-size:18px}
+.action-table{width:100%;border-collapse:collapse}
+.action-table th{background:#0078bd;color:white;padding:10px;border:1px solid #333}
+.action-table td{border:1px solid #333;padding:8px;height:45px}
+.action-table input,.action-table textarea{width:100%;border:none;outline:none;font-size:15px}
+.footer-line{border:1px solid #333;border-top:none;padding:15px}
+.signatures{display:flex;justify-content:space-around;margin-top:60px;text-align:center}
+button{margin:20px 5px;padding:12px 18px;background:#0078bd;color:white;border:none;border-radius:6px;font-weight:bold}
+@media print{button{display:none}.container{padding:0}}
+</style>
 </head>
-
 <body>
-
-<header class="header">
-
-<div class="brand">
-<img src="icon-192.png" alt="SSP logo" class="logo">
-<div>
-<h1>Food Safety Checklist & Action Form</h1>
-<p>SSP Bahrain Food Safety Checklist</p>
-</div>
-</div>
-
-</header>
-
 <div class="container">
 
-<div class="card">
+<div class="logo">SSP Bahrain</div>
+<h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
 
-<h2>Auditor Information</h2>
-
-<div class="form-group">
-<label>Auditor Name</label>
-<input type="text" id="auditor" placeholder="Enter Auditor Name">
+<div class="top-row">
+  <div>Unit/Location: <input id="unit"></div>
+  <div>Date: <input type="date" id="date"></div>
 </div>
 
-<div class="form-group">
-<label>Outlet / Unit</label>
-<input type="text" id="outlet" placeholder="Enter Outlet Name">
+<div class="info">
+Mark with ‘✓’ whatever is correct and with ‘X’ whatever is not. For points not related write ‘N/A’. Score = ✓ / (✓ + X) × 100. Anything over 90% is success.
 </div>
 
-<div class="form-group">
-<label>Audit Date</label>
-<input type="date" id="auditDate">
+<div class="checklist" id="checklist"></div>
+
+<div class="score-box">
+  <div>Completed by: Mohammed Eassa Haneefa</div>
+  <div>Score: <span id="score">0%</span></div>
 </div>
 
-<div class="form-group">
-<label>Audit Time</label>
-<input type="time" id="auditTime">
+<div class="action-title">FOOD SAFETY CHECKLIST & ACTION FORM</div>
+
+<div class="top-row">
+  <div>Unit/Location: <input></div>
+  <div>Date: <input type="date"></div>
+  <div>Score: <span id="score2">0%</span></div>
 </div>
 
-<button id="startAudit">
-Start Audit
-</button>
+<table class="action-table">
+<thead>
+<tr>
+<th>No.</th><th>Comment</th><th>Action to be taken</th><th>Responsible</th><th>Deadline</th><th>Date & Verification</th>
+</tr>
+</thead>
+<tbody>
+<script>
+for(let i=1;i<=8;i++){
+document.write(`<tr>
+<td>${i}</td>
+<td><textarea></textarea></td>
+<td><textarea></textarea></td>
+<td><input></td>
+<td><input type="date"></td>
+<td><input></td>
+</tr>`);
+}
+</script>
+</tbody>
+</table>
 
+<div class="footer-line">
+Date of action plan completion ............................................................
 </div>
 
-<div id="auditSection" style="display:none;">
-
-<div class="card">
-
-<h2>Food Safety Checklist</h2>
-
-<p id="actionModeNotice" class="notice" style="display:none;">Action-only mode: recipients can update corrective-action fields, but audit answers are locked.</p>
-
-<div id="checklist"></div>
-
+<div class="signatures">
+<div>Acknowledged by<br><br>Unit / Location Manager</div>
+<div>Verified by<br><br>FSTL</div>
+<div>Verified by<br><br>Operations Manager</div>
 </div>
 
-<div class="card score">
-
-<h2>Audit Result</h2>
-
-<p>Total ✓ : <span id="yesCount">0</span></p>
-
-<p>Total ✗ : <span id="noCount">0</span></p>
-
-<p>Total N/A : <span id="naCount">0</span></p>
-
-<h3>Score</h3>
-
-<div id="score">0%</div>
-
-<button id="calculateScore">
-Calculate Score
-</button>
-
-<button id="generatePdf" class="secondary-button">
-Convert Checklist to PDF
-</button>
-
-<button id="emailReport" class="secondary-button">
-Send Email
-</button>
+<button onclick="calculateScore()">Calculate Score</button>
+<button onclick="window.print()">Print / Save PDF</button>
 
 </div>
 
-</div>
+<script>
+const items = [
+"No evidence of PEST activity","PEST treatment done in the last month","Chiller/freezer temperatures are correct","Chiller/freezer temperatures are taken 3 times daily","Maintenance Issues are being recorded and communicated","Team knows how and where to dispose broken glass/crockery","No threat which could result to trip, slip or fall","Manual handling performed as per guidelines","Waste disposal performed as per procedures","Hands are being sanitized correctly","Hand washing sink is in good working order and equipped with soap/sanitizer and paper towel","Uniforms are clean and neatly worn",
+"Gloves or appropriate utensil is being used when handling food","The updated shelf-life guide is available","Areas are cleaned/sanitized","Equipment is clean/sanitized","Cleaning checklists are complete and correct","MSDS files for all chemicals are available","Chemicals are being correctly used","Ice Machine is clean inside out","Ice Machine cleaning record is complete","Food is stored in the correct temperature range","Fire Extinguishers are available and ready to use","Fire Extinguisher checklist is complete monthly",
+"First Aid Box is available and complete","The First aid inventory card is completed for the last month","Products are day dotted according to the shelf-life guide","FIFO is applicable","No expired products found","Correct color coding is applicable","Food in hot & cold holding is in the proper temperature range","Cold & Hot Holding temperature record is complete and correct","Thermometers are being calibrated weekly","Fruit & Veg Sanitation record is complete and correct","Food in chiller is stored as per the chiller guide","Foods are stored in the correct temperature",
+"Cooking/reheating records are complete and correct","Foods are stored in closed food grade containers","Cooling records are complete and correct","Cold water thawing records are complete and correct","Products thawed in the chiller are clearly marked and placed on the designated shelf","Grease traps were cleaned in the last month","Hoods/exhaust fans were cleaned in the last 3 months","Knives handover and inventory logs are complete and correct","Knives are safely used","Quality Check is complete"
+];
 
-<footer class="report-footer">Doc ID: SSP-FSMS-FM-083; Vs 0.0; Issue Date : 10.08.2024</footer>
+const checklist = document.getElementById("checklist");
+items.forEach((text,i)=>{
+ checklist.innerHTML += `
+ <div class="item">${i+1}. ${text}</div>
+ <div class="mark">
+ <select onchange="calculateScore()">
+ <option value="">-</option>
+ <option value="yes">✓</option>
+ <option value="no">X</option>
+ <option value="na">N/A</option>
+ </select>
+ </div>`;
+});
 
-</div>
-
-<script src="app.js"></script>
+function calculateScore(){
+ let yes=0,no=0;
+ document.querySelectorAll(".mark select").forEach(s=>{
+   if(s.value==="yes") yes++;
+   if(s.value==="no") no++;
+ });
+ let score = yes + no > 0 ? Math.round((yes/(yes+no))*100) : 0;
+ document.getElementById("score").innerText = score + "%";
+ document.getElementById("score2").innerText = score + "%";
+}
+</script>
 
 </body>
-
 </html>
