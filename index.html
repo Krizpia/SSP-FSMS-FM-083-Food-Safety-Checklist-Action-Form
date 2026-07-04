@@ -3,74 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Safety Checklist</title>
+<title>Food Safety Checklist & Action Form</title>
 
 <style>
 @page {
   size: A4 landscape;
-  margin: 8mm;
+  margin: 6mm;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background: #eef3f7;
+  background: #dfe3e8;
   color: #111;
 }
 
+.buttons {
+  text-align: center;
+  padding: 12px;
+  background: #eef3f7;
+}
+
+button {
+  padding: 11px 18px;
+  background: #0078bd;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 5px;
+  cursor: pointer;
+}
+
 .page {
-  width: 100%;
-  min-height: 190mm;
+  width: 285mm;
+  height: 190mm;
+  margin: 10px auto;
   background: #fff;
-  padding: 10px;
-  box-sizing: border-box;
+  padding: 5mm;
+  overflow: hidden;
   page-break-after: always;
 }
 
 .logo {
   text-align: center;
+  height: 30px;
 }
 
 .logo img {
-  width: 120px;
-  max-height: 60px;
+  width: 95px;
+  max-height: 30px;
   object-fit: contain;
 }
 
 h1 {
   text-align: center;
-  font-size: 24px;
-  margin: 5px 0 12px;
+  font-size: 20px;
+  margin: 4px 0 8px;
+  font-weight: 800;
 }
 
 .top-row {
   display: flex;
   border: 1px solid #333;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .top-row div {
   flex: 1;
-  padding: 7px;
+  padding: 5px;
 }
 
 input, select, textarea {
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.top-row input {
+  border: none;
+  outline: none;
+  width: 70%;
 }
 
 .info {
   background: #0078bd;
   color: white;
   font-weight: bold;
-  padding: 8px;
-  border: 1px solid #333;
-  font-size: 15px;
+  padding: 5px;
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+  font-size: 11px;
+  line-height: 1.25;
 }
 
 .checklist {
   display: grid;
-  grid-template-columns: 1fr 48px 1fr 48px 1fr 48px 1fr 48px;
+  grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr 36px;
   border-left: 1px solid #333;
   border-top: 1px solid #333;
 }
@@ -78,10 +110,10 @@ input, select, textarea {
 .item, .mark {
   border-right: 1px solid #333;
   border-bottom: 1px solid #333;
-  padding: 6px;
-  min-height: 38px;
-  font-size: 15px;
-  box-sizing: border-box;
+  padding: 4px;
+  min-height: 27px;
+  font-size: 10.5px;
+  line-height: 1.15;
 }
 
 .item {
@@ -89,40 +121,49 @@ input, select, textarea {
 }
 
 .mark {
-  background: white;
+  background: #fff;
   text-align: center;
+  padding: 3px;
 }
 
 .mark select {
   width: 100%;
-  height: 30px;
+  height: 20px;
+  font-size: 10px;
 }
 
 .score-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
-  font-size: 16px;
+  margin-top: 7px;
+  font-size: 11px;
+}
+
+.doc-footer {
+  text-align: center;
+  margin-top: 7px;
+  font-size: 10px;
 }
 
 .action-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .action-table th {
   background: #0078bd;
   color: white;
   border: 1px solid #333;
-  padding: 8px;
-  font-size: 15px;
+  padding: 5px;
+  font-size: 12px;
 }
 
 .action-table td {
   border: 1px solid #333;
-  height: 40px;
-  padding: 4px;
+  height: 32px;
+  padding: 3px;
+  font-size: 12px;
 }
 
 .action-table input,
@@ -132,11 +173,10 @@ input, select, textarea {
   border: none;
   outline: none;
   resize: none;
-  box-sizing: border-box;
 }
 
 .no-col {
-  width: 50px;
+  width: 42px;
   text-align: center;
   font-weight: bold;
 }
@@ -144,42 +184,22 @@ input, select, textarea {
 .footer-line {
   border: 1px solid #333;
   border-top: none;
-  padding: 12px;
-  font-size: 15px;
+  padding: 9px;
+  font-size: 12px;
 }
 
 .signatures {
   display: flex;
   justify-content: space-around;
-  margin-top: 45px;
+  margin-top: 42px;
   text-align: center;
-  font-size: 15px;
-}
-
-.doc-footer {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 14px;
-}
-
-.buttons {
-  text-align: center;
-  padding: 15px;
-}
-
-button {
-  padding: 12px 18px;
-  background: #0078bd;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  margin: 5px;
+  font-size: 12px;
 }
 
 @media print {
   body {
     background: white;
+    margin: 0;
   }
 
   .buttons {
@@ -187,7 +207,12 @@ button {
   }
 
   .page {
+    width: 285mm;
+    height: 190mm;
+    margin: 0;
+    padding: 5mm;
     page-break-after: always;
+    break-after: page;
   }
 }
 </style>
@@ -210,13 +235,14 @@ button {
   <h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
 
   <div class="top-row">
-    <div>Unit/Location: <input id="unit" style="width:70%;border:none;outline:none;"></div>
-    <div>Date: <input type="date" id="date" style="border:none;outline:none;"></div>
+    <div>Unit/Location: <input id="unit" type="text"></div>
+    <div>Date: <input id="date" type="date"></div>
   </div>
 
   <div class="info">
     Mark with ‘✓’ whatever is correct and with ‘X’ whatever is not. For points not related to the unit/location write ‘N/A’.
-    Score = ✓ / (✓ + X) × 100. Anything over 90% is success.
+    At the end of the audit divide the number of ‘✓’ by the sum of ‘✓’ + ‘X’ to get the score.
+    Scoring system: Anything over 90% is success. Action plan to be completed for points marked with ‘X’.
   </div>
 
   <div class="checklist" id="checklist"></div>
@@ -242,8 +268,8 @@ button {
   <h1>FOOD SAFETY CHECKLIST & ACTION FORM</h1>
 
   <div class="top-row">
-    <div>Unit/Location: <input id="unit2" style="width:70%;border:none;outline:none;"></div>
-    <div>Date: <input type="date" id="date2" style="border:none;outline:none;"></div>
+    <div>Unit/Location: <input id="unit2" type="text"></div>
+    <div>Date: <input id="date2" type="date"></div>
     <div>Score: <span id="score2">0%</span></div>
   </div>
 
@@ -349,7 +375,10 @@ function calculateScore() {
   let failedNumbers = [];
 
   document.querySelectorAll(".mark select").forEach(select => {
-    if (select.value === "yes") yes++;
+    if (select.value === "yes") {
+      yes++;
+    }
+
     if (select.value === "no") {
       no++;
       failedNumbers.push(select.dataset.no);
@@ -373,14 +402,14 @@ function calculateScore() {
         <td class="no-col">${no}</td>
         <td><textarea></textarea></td>
         <td><textarea></textarea></td>
-        <td><input></td>
+        <td><input type="text"></td>
         <td><input type="date"></td>
-        <td><input></td>
+        <td><input type="text"></td>
       </tr>
     `;
   });
 
-  let emptyRows = Math.max(8 - failedNumbers.length, 0);
+  let emptyRows = Math.max(10 - failedNumbers.length, 0);
 
   for (let i = 0; i < emptyRows; i++) {
     actionBody.innerHTML += `
@@ -388,13 +417,16 @@ function calculateScore() {
         <td class="no-col"></td>
         <td><textarea></textarea></td>
         <td><textarea></textarea></td>
-        <td><input></td>
+        <td><input type="text"></td>
         <td><input type="date"></td>
-        <td><input></td>
+        <td><input type="text"></td>
       </tr>
     `;
   }
 }
+
+document.getElementById("unit").addEventListener("input", calculateScore);
+document.getElementById("date").addEventListener("input", calculateScore);
 
 calculateScore();
 </script>
