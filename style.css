@@ -1,1 +1,159 @@
+* {
+  box-sizing: border-box;
+}
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f7fb;
+  color: #1f2937;
+}
+
+.header {
+  background: #0f4c81;
+  color: white;
+  padding: 22px 16px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.header p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #0f4c81;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  background: #0f4c81;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.check-item {
+  border: 1px solid #dbe4ee;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #ffffff;
+}
+
+.check-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.options {
+  display: flex;
+  gap: 8px;
+}
+
+.options button {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.options button.selected.yes {
+  background: #16a34a;
+  color: white;
+}
+
+.options button.selected.no {
+  background: #dc2626;
+  color: white;
+}
+
+.options button.selected.na {
+  background: #6b7280;
+  color: white;
+}
+
+.action-box {
+  margin-top: 12px;
+  display: none;
+}
+
+.action-box textarea,
+.action-box input {
+  margin-bottom: 8px;
+}
+
+.score {
+  text-align: center;
+}
+
+#score {
+  font-size: 42px;
+  font-weight: bold;
+  color: #0f4c81;
+  margin: 12px 0;
+}
+
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 21px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  .options {
+    flex-direction: column;
+  }
+}
