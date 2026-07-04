@@ -191,3 +191,24 @@ function calculateScore() {
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
+function previewPhoto(number, input){
+
+    const file = input.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        const img = document.getElementById("preview-"+number);
+
+        img.src = e.target.result;
+
+        img.style.display="block";
+
+    }
+
+    reader.readAsDataURL(file);
+
+}
