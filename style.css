@@ -191,3 +191,79 @@ button:active {
     flex-direction: column;
   }
 }
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.logo {
+  background: white;
+  border-radius: 12px;
+  height: 64px;
+  object-fit: contain;
+  padding: 6px;
+  width: 64px;
+}
+
+.notice {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  color: #9a3412;
+  font-weight: bold;
+  padding: 12px;
+}
+
+.secondary-button {
+  background: #e0f2fe;
+  color: #0f4c81;
+  margin-top: 10px;
+}
+
+.report-footer {
+  color: #475569;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 10px 16px 24px;
+  text-align: center;
+}
+
+.action-only .answer-button {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  button,
+  input[type="file"],
+  .photo-help,
+  #startAudit {
+    display: none !important;
+  }
+
+  .container {
+    max-width: none;
+  }
+
+  .card,
+  .check-item {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .action-box {
+    display: block !important;
+  }
+
+  .report-footer {
+    border-top: 1px solid #cbd5e1;
+    margin-top: 16px;
+  }
+}
