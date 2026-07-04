@@ -89,12 +89,48 @@ function renderChecklist() {
       </div>
 
       <div class="action-box" id="action-${number}">
-        <textarea id="comment-${number}" placeholder="Comment / Finding"></textarea>
-        <textarea id="actionText-${number}" placeholder="Action to be taken"></textarea>
-        <input type="text" id="responsible-${number}" placeholder="Responsible person">
-        <input type="date" id="deadline-${number}">
-        <input type="text" id="verification-${number}" placeholder="Verification / Date of completion">
-      </div>
+
+    <textarea id="comment-${number}" placeholder="Finding / Comment"></textarea>
+
+    <label class="photoLabel">📷 Evidence Photo</label>
+
+    <input
+        type="file"
+        id="photo-${number}"
+        accept="image/*"
+        capture="environment"
+        onchange="previewPhoto(${number}, this)"
+    >
+
+    <img
+        id="preview-${number}"
+        class="previewImage"
+        style="display:none;"
+    >
+
+    <textarea
+        id="actionText-${number}"
+        placeholder="Corrective Action"
+    ></textarea>
+
+    <input
+        type="text"
+        id="responsible-${number}"
+        placeholder="Responsible Person"
+    >
+
+    <input
+        type="date"
+        id="deadline-${number}"
+    >
+
+    <input
+        type="text"
+        id="verification-${number}"
+        placeholder="Verification"
+    >
+
+</div>
     `;
 
     checklist.appendChild(div);
