@@ -172,3 +172,81 @@ button:active {
     flex-direction: column;
   }
 }
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.logo {
+  background: #fff;
+  border-radius: 12px;
+  height: 64px;
+  object-fit: contain;
+  padding: 6px;
+  width: 64px;
+}
+
+.notice {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  color: #9a3412;
+  font-weight: bold;
+  margin: 0 auto 16px;
+  max-width: 900px;
+  padding: 12px 16px;
+}
+
+.secondary-button {
+  background: #2563eb;
+  margin-top: 10px;
+}
+
+.report-footer {
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  bottom: 0;
+  color: #334155;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: sticky;
+  text-align: center;
+  width: 100%;
+}
+
+.action-only-mode .audit-only-field,
+.action-only-mode .audit-only-input,
+.action-only-mode #startAudit,
+.action-only-mode #calculateScore {
+  opacity: 0.55;
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  button,
+  input[type="file"],
+  .notice {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .header {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .report-footer {
+    bottom: 0;
+    position: fixed;
+  }
+}

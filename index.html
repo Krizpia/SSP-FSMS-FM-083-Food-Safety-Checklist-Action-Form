@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Food Safety Audit Pro</title>
+<title>Food Safety Checklist &amp; Action Form</title>
 
 <meta name="theme-color" content="#0F4C81">
 
@@ -22,9 +22,13 @@
 
 <header class="header">
 
-<h1>🍽 Food Safety Audit Pro</h1>
-
+<div class="brand">
+<img src="icon-192.png" alt="SSP Logo" class="logo">
+<div>
+<h1>Food Safety Checklist &amp; Action Form</h1>
 <p>SSP Bahrain Food Safety Checklist</p>
+</div>
+</div>
 
 </header>
 
@@ -60,6 +64,8 @@ Start Audit
 
 </div>
 
+<div id="modeNotice" class="notice" style="display:none;">Action-only mode: recipients can complete only the action fields.</div>
+
 <div id="auditSection" style="display:none;">
 
 <div class="card">
@@ -88,6 +94,14 @@ Start Audit
 Calculate Score
 </button>
 
+<button id="generatePdf" class="secondary-button">
+Convert Checklist to PDF
+</button>
+
+<button id="emailReport" class="secondary-button">
+Send Email
+</button>
+
 </div>
 
 </div>
@@ -95,6 +109,8 @@ Calculate Score
 </div>
 
 <script src="app.js"></script>
+
+<footer class="report-footer">Doc ID: SSP-FSMS-FM-083; Vs 0.0; Issue Date : 10.08.2024</footer>
 
 </body>
 

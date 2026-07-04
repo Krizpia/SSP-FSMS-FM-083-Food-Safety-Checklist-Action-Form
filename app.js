@@ -48,12 +48,14 @@ const checklistItems = [
 ];
 
 const answers = {};
+const actionOnlyMode = new URLSearchParams(window.location.search).get("mode") === "action";
 
-document.getElementById("auditDate").valueAsDate = new Date();
+const auditDate = document.getElementById("auditDate");
+const auditTime = document.getElementById("auditTime");
 
+auditDate.valueAsDate = new Date();
 const now = new Date();
-document.getElementById("auditTime").value =
-  now.toTimeString().slice(0, 5);
+auditTime.value = now.toTimeString().slice(0, 5);
 
 document.getElementById("startAudit").addEventListener("click", () => {
   const auditor = document.getElementById("auditor").value.trim();
@@ -66,6 +68,7 @@ document.getElementById("startAudit").addEventListener("click", () => {
 
   document.getElementById("auditSection").style.display = "block";
   renderChecklist();
+  applyActionOnlyMode();
   window.scrollTo({ top: document.getElementById("auditSection").offsetTop, behavior: "smooth" });
 });
 
@@ -75,90 +78,46 @@ function renderChecklist() {
 
   checklistItems.forEach((item, index) => {
     const number = index + 1;
-
     const div = document.createElement("div");
     div.className = "check-item";
 
     div.innerHTML = `
       <div class="check-title">${number}. ${item}</div>
-
-      <div class="options">
+      <div class="options audit-only-field">
         <button type="button" class="yes" onclick="selectAnswer(${number}, 'yes', this)">✓ Yes</button>
         <button type="button" class="no" onclick="selectAnswer(${number}, 'no', this)">✗ No</button>
         <button type="button" class="na" onclick="selectAnswer(${number}, 'na', this)">N/A</button>
       </div>
-
+      <div class="action-box" id="action-${number}">
+        <textarea class="audit-only-input" id="comment-${number}" placeholder="Finding / Comment"></textarea>
+        <label class="photoLabel audit-only-field">📷 Evidence Photo</label>
+        <input class="audit-only-input" type="file" id="photo-${number}" accept="image/*" capture="environment" onchange="previewPhoto(${number}, this)">
+        <img id="preview-${number}" class="previewImage" style="display:none;">
+        <textarea class="action-input" id="actionText-${number}" placeholder="Action to be taken"></textarea>
+        <input class="action-input" type="text" id="responsible-${number}" placeholder="Responsible Person">
+        <input class="action-input" type="date" id="deadline-${number}">
+        <input class="action-input" type="text" id="verification-${number}" placeholder="Verification / Closure Notes">
+      </div>
     `;
 
     checklist.appendChild(div);
   });
 }
-<div class="action-box" id="action-${number}">
-
-    <textarea id="comment-${number}" placeholder="Finding / Comment"></textarea>
-
-    <label class="photoLabel">📷 Evidence Photo</label>
-
-    <input
-        type="file"
-        id="photo-${number}"
-        accept="image/*"
-        capture="environment"
-        onchange="previewPhoto(${number}, this)"
-    >
-
-    <img
-        id="preview-${number}"
-        class="previewImage"
-        style="display:none;"
-    >
-
-    <textarea
-        id="actionText-${number}"
-        placeholder="Corrective Action"
-    ></textarea>
-
-    <input
-        type="text"
-        id="responsible-${number}"
-        placeholder="Responsible Person"
-    >
-
-    <input
-        type="date"
-        id="deadline-${number}"
-    >
-
-    <input
-        type="text"
-        id="verification-${number}"
-        placeholder="Verification"
-    >
-
-</div>
 
 function selectAnswer(number, value, button) {
   answers[number] = value;
-
-  const parent = button.parentElement;
-  const buttons = parent.querySelectorAll("button");
-
+  const buttons = button.parentElement.querySelectorAll("button");
   buttons.forEach(btn => btn.classList.remove("selected"));
-
-  button.classList.add("selected");
+  button.classList.add("selected", value);
 
   const actionBox = document.getElementById(`action-${number}`);
-
-  if (value === "no") {
-    actionBox.style.display = "block";
-  } else {
-    actionBox.style.display = "none";
-  }
-
+  actionBox.style.display = value === "no" ? "block" : "none";
   calculateScore();
 }
 
 document.getElementById("calculateScore").addEventListener("click", calculateScore);
+document.getElementById("generatePdf").addEventListener("click", generatePdf);
+document.getElementById("emailReport").addEventListener("click", emailReport);
 
 function calculateScore() {
   let yes = 0;
@@ -172,43 +131,65 @@ function calculateScore() {
   });
 
   const totalApplicable = yes + no;
-  const score = totalApplicable > 0 ? ((yes / totalApplicable) * 100).toFixed(2) : 0;
+  const score = totalApplicable > 0 ? ((yes / totalApplicable) * 100).toFixed(2) : "0.00";
 
   document.getElementById("yesCount").textContent = yes;
   document.getElementById("noCount").textContent = no;
   document.getElementById("naCount").textContent = na;
   document.getElementById("score").textContent = `${score}%`;
+  document.getElementById("score").style.color = Number(score) >= 90 ? "#16a34a" : "#dc2626";
+}
 
-  const scoreBox = document.getElementById("score");
+function generatePdf() {
+  calculateScore();
+  window.print();
+}
 
-  if (score >= 90) {
-    scoreBox.style.color = "#16a34a";
-  } else {
-    scoreBox.style.color = "#dc2626";
-  }
+function emailReport() {
+  calculateScore();
+  const subject = encodeURIComponent("Food Safety Checklist & Action Form");
+  const body = encodeURIComponent(
+    "Dear Team,\n\nPlease find the Food Safety Checklist & Action Form PDF attached. " +
+    "Action owners should complete only the 'Action to be taken' section, responsible person, deadline, and verification/closure notes.\n\n" +
+    `Audit Date: ${auditDate.value}\nOutlet / Unit: ${document.getElementById("outlet").value}\n\n` +
+    "If needed, open the checklist in action-only mode by adding ?mode=action to the app URL.\n\n" +
+    "Doc ID: SSP-FSMS-FM-083; Vs 0.0; Issue Date : 10.08.2024"
+  );
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+function applyActionOnlyMode() {
+  if (!actionOnlyMode) return;
+
+  document.body.classList.add("action-only-mode");
+  document.querySelectorAll("#auditor, #outlet, #auditDate, #auditTime, .audit-only-input")
+    .forEach(field => { field.disabled = true; });
+  document.querySelectorAll(".audit-only-field button")
+    .forEach(button => { button.disabled = true; });
+  document.querySelectorAll(".action-box")
+    .forEach(box => { box.style.display = "block"; });
+  document.getElementById("modeNotice").style.display = "block";
+}
+
+if (actionOnlyMode) {
+  document.getElementById("auditSection").style.display = "block";
+  renderChecklist();
+  applyActionOnlyMode();
 }
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
-function previewPhoto(number, input){
 
-    const file = input.files[0];
+function previewPhoto(number, input) {
+  const file = input.files[0];
+  if (!file) return;
 
-    if(!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-
-        const img = document.getElementById("preview-"+number);
-
-        img.src = e.target.result;
-
-        img.style.display="block";
-
-    }
-
-    reader.readAsDataURL(file);
-
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = document.getElementById(`preview-${number}`);
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+  reader.readAsDataURL(file);
 }
