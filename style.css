@@ -152,6 +152,21 @@ button:active {
   .container {
     padding: 12px;
   }
+  .photoLabel{
+    display:block;
+    margin-top:10px;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.previewImage{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-top:10px;
+    border:1px solid #ddd;
+}
 
   .options {
     flex-direction: column;
